@@ -1,6 +1,11 @@
 import math
+import matplotlib
+import numpy as np
+
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import meshing_function
 
 class HalfSphere:
     PI = 3.14159265359
@@ -12,6 +17,7 @@ class HalfSphere:
         self.r = radius
         self.N = particle_number
         self.points_list = []
+        self.points_list_numpy = None
 
         print("radius ", radius)
         print("particle_number ", particle_number)
@@ -49,6 +55,8 @@ class HalfSphere:
                 it += 1
                 if z > 0:
                     self.points_list.append((x,y,z))
+
+        self.points_list_numpy = np.array(self.points_list)
         return self.points_list
 
 
@@ -59,16 +67,30 @@ obj.generatePoints()
 obj2 = HalfSphere(8, 4000)
 obj2.generatePoints()
 
-fig = plt.figure()
-ax = Axes3D(fig)
+# fig = plt.figure()
+# ax = Axes3D(fig)
 
-for x in obj.points_list:
-    ax.axes.scatter(x[0], x[1], x[2], s=10, c='r', marker='o')
+# fig = plt.figure()
+# ax = fig.add_subplot(111, projection='3d')
+#
+# for x in obj.points_list:
+#     ax.scatter(x[0], x[1], x[2], s=10, c='r', marker='o')
+#     # ax.axes.scatter(x[0], x[1], x[2], s=10, c='r', marker='o')
+#
+#
+# for y in obj2.points_list:
+#     ax.scatter(y[0], y[1], y[2], s=10, c='b', marker='x')
+#     # ax.axes.scatter(y[0], y[1], y[2], s=10, c='b', marker='x')
+#
+#
+#
+# plt.show()
 
-for y in obj2.points_list:
-    ax.axes.scatter(y[0], y[1], y[2], s=10, c='b', marker='x')
 
+# print("type np array ", type(obj2.points_list_numpy))
+# print(obj2.points_list_numpy)
 
+meshed_half_sphere = meshing_function.generate_mesh(obj2.points_list_numpy)
 
-plt.show()
+meshing_function.plot_mesh(obj2.points_list_numpy, meshed_half_sphere)
 

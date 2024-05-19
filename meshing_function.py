@@ -18,6 +18,10 @@ def generate_mesh(surface_points):
     # Perform Delaunay triangulation
     tri = Delaunay(surface_points[:, :2])
 
+    print("TRI")
+    print(type(tri))
+    print(tri)
+
     return tri
 
 
@@ -49,6 +53,8 @@ def plot_mesh(surface_points, tri):
 # Example usage
 # Generate some random non-regular surface points
 surface_points = np.random.rand(30, 3)  # 30 points with (x, y, z) coordinates
+# print("surface_points", surface_points)
+# print(type(surface_points))
 # Generate mesh
 tri = generate_mesh(surface_points)
 # Plot mesh

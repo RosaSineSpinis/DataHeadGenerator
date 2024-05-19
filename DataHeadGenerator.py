@@ -1,5 +1,7 @@
 import os
 import json
+import matplotlib
+matplotlib.use('TkAgg')
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button, RadioButtons
@@ -27,7 +29,8 @@ def loadFileToList(string):
     return list_from_file
 
 
-def generatePoints(beginning_pos_x, ending_pos_x, beginning_pos_y, ending_pos_y, beginning_pos_z, ending_pos_z, increment_x, increment_y, increment_z, small_radius, big_radius):
+def generatePoints(beginning_pos_x, ending_pos_x, beginning_pos_y, ending_pos_y, beginning_pos_z, ending_pos_z,
+                   increment_x, increment_y, increment_z, small_radius, big_radius):
     points_list = []
     x = beginning_pos_x
     y = beginning_pos_y
@@ -79,9 +82,8 @@ def update(val):
 
 
 generated_points_list = []
-generated_points_list = generatePoints(-6, 6, -6, 6, -6, 6, 0.4, 0.4, 0.4, 5, 7)
+generated_points_list = generatePoints(-6, 6, -6, 6, -6, 6, 2, 2, 2, 5, 7)
 
-            
 
 path = os.path.join('.', 'input_data.txt')
 point_list = []
@@ -96,16 +98,39 @@ json.dump(generated_points_list, save_file)
 save_file.close()
 
 
+
 #modify this function and check with 2d plot
 
-fig, ax = plt.subplots()
-fig.subplots_adjust(bottom=0.3)
+# fig, ax = plt.subplots()
+# fig.subplots_adjust(bottom=0.3)
 #ax = plt.subplot(projection='3d')
 
+# fig, ax = plt.subplots(subplot_kw={'projection': '3d'})
+# fig.subplots_adjust(bottom=0.3)
+#
+# x_val = [t[0] for t in generated_points_list]
+# y_val = [t[0] for t in generated_points_list]
+# z_val = [t[0] for t in generated_points_list]
+#
+# print("x_val ", x_val)
+# print("y_val ", y_val)
+# print("z_val ", z_val)
+#
+# ax.scatter(x_val, y_val, z_val, s=10, c='r', marker='o')
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
 for x in generated_points_list:
-    ax.axes.scatter(x[0], x[1], s = 10, c='r', marker='o')
+    ax.scatter(x[0], x[1], x[2], s=10, c='r', marker='o')
+    # ax.axes.scatter(x[0], x[1], x[2], s=10, c='r', marker='o')
 
 
+print("going to loop")
+# for x in generated_points_list:
+#     # ax.axes.scatter(x[0], x[1], s = 10, c='r', marker='o')
+#     ax.scatter(x[0], x[1], x[2], s = 10, c='r', marker='o')
+#     print("loop")
 '''
 def plot_graph(list_of_points):
     plt.subplots()
@@ -137,28 +162,28 @@ def plot_graph2(list_of_points, ax):
 
 axcolor = 'lightgoldenrodyellow'
 slider_x_min = plt.axes([0.1, 0.15, 0.3, 0.02], facecolor=axcolor)
-x_min = Slider(slider_x_min, 'x_min', valmin=-100, valmax=100, valstep=1)
+x_min = Slider(slider_x_min, 'x_min', valmin=-100, valmax=100, valstep=1, valinit=-50)
 #x_min_values.on_changed(update)
 
 axcolor = 'lightgoldenrodyellow'
 slider_x_max = plt.axes([0.6, 0.15, 0.3, 0.02], facecolor=axcolor)
-x_max = Slider(slider_x_max, 'x_max', valmin=-100, valmax=100, valstep=1)
+x_max = Slider(slider_x_max, 'x_max', valmin=-100, valmax=100, valstep=1, valinit=50)
 
 axcolor = 'lightgoldenrodyellow'
 slider_y_min = plt.axes([0.1, 0.1, 0.3, 0.02], facecolor=axcolor)
-y_min = Slider(slider_y_min, 'y_min', valmin=-100, valmax=100, valstep=1)
+y_min = Slider(slider_y_min, 'y_min', valmin=-100, valmax=100, valstep=1, valinit=-50)
 
 axcolor = 'lightgoldenrodyellow'
 slider_y_max = plt.axes([0.6, 0.1, 0.3, 0.02], facecolor=axcolor)
-y_max = Slider(slider_y_max, 'y_max', valmin=-100, valmax=100, valstep=1)
+y_max = Slider(slider_y_max, 'y_max', valmin=-100, valmax=100, valstep=1, valinit=50)
 
 axcolor = 'lightgoldenrodyellow'
 slider_z_min = plt.axes([0.1, 0.05, 0.3, 0.02], facecolor=axcolor)
-z_min = Slider(slider_z_min, 'z_min', valmin=-100, valmax=100, valstep=1)
+z_min = Slider(slider_z_min, 'z_min', valmin=-100, valmax=100, valstep=1, valinit=-50)
 
 axcolor = 'lightgoldenrodyellow'
 slider_z_max = plt.axes([0.6, 0.05, 0.3, 0.02], facecolor=axcolor)
-z_max = Slider(slider_z_max, 'z_max', valmin=-100, valmax=100, valstep=1)
+z_max = Slider(slider_z_max, 'z_max', valmin=-100, valmax=100, valstep=1, valinit=50)
 
 #def val_update(val):
     #generated_points_list = generatePoints(x_min.val, x_max.val, y_min.val, y_max.val, z_min.val, z_max.val, 1, 1, 1, 5, 7)
@@ -171,13 +196,13 @@ z_max = Slider(slider_z_max, 'z_max', valmin=-100, valmax=100, valstep=1)
 #x_min.on_changed(val_update)
 #x_max.on_changed(val_update)
 
-
 recompute_button_box = plt.axes([0.1, 0.9, 0.25, 0.1])
 recompute_button = Button(recompute_button_box, 'Recompute')
 
+print('we are here')
+
 
 def recompute(val):
-    print('we are here')
     print('x_min ' + str(x_min.val) + ' x_max= ' + str(x_max.val) + ' y_min= ' + str(y_min.val) + ' y_max= ' + str(y_max.val) +
           ' z_min= ' + str(z_min.val) + ' z_max= ' + str(z_max.val))
 
@@ -185,16 +210,19 @@ def recompute(val):
     generated_points_list = generatePoints(x_min.val, x_max.val, y_min.val, y_max.val, z_min.val, z_max.val, 2, 2, 2, 5, 7)
     for i in generated_points_list:
         print(i)
-    ax.axes.clear()
+    # ax.axes.clear()
+    ax.clear()
     for x in generated_points_list:
         print(str(x[0]) + ' ' + str(x[1]) + ' ' + str(x[2]))
-        ax.axes.scatter(x[0], x[1], s = 10, c='r', marker='o')
+        # ax.axes.scatter(x[0], x[1], s = 10, c='r', marker='o')
+        ax.scatter(x[0], x[1], s = 10, c='r', marker='o')
+
     plt.show()
 
 
 recompute_button.on_clicked(recompute)
 
-print('OUTSIDE \nx_min ' + str(x_min.val) + ' x_max= ' + str(x_max.val) + '\n y_min= ' + str(y_min.val) + ' y_max= ' + str(
-    y_max.val) + '\n z_min= ' + str(z_min.val) + ' z_max= ' + str(z_max.val))
+print('OUTSIDE \nx_min ' + str(x_min.val) + ' x_max= ' + str(x_max.val) + '\n y_min= ' + str(y_min.val) + ' y_max= ' +
+      str(y_max.val) + '\n z_min= ' + str(z_min.val) + ' z_max= ' + str(z_max.val))
 
 plt.show()
